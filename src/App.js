@@ -1,22 +1,19 @@
-import React, {useState, useEffect}  from 'react';
+import React, {useState, useEffect} from 'react';
 import Jokes from './Jokes';
 
 const App = () => {
-  const [value, setValue] = useState(
-    localStorage.getItem('jokesInLocalStorage') || []
+
+  const [jokes, setJokes] = useState(
+    JSON.parse(localStorage.getItem('jokesInLocalStorage')) || []
   );
 
   useEffect(() => {
-    localStorage.setItem('jokesInLocalStorage', value);
-  }, [value]);
-
-  const setValueInLocalStorage = (value) => {
-    setValue(JSON.stringify(value));
-  }
+    localStorage.setItem('jokesInLocalStorage', JSON.stringify(jokes));
+  }, [jokes]);
 
   return (
     <div>
-      <Jokes value={value} setValueInLocalStorage={setValueInLocalStorage}/>
+      <Jokes jokes={jokes} setJokes={setJokes} />
     </div>
   );
 };

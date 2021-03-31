@@ -6,9 +6,9 @@ export default class Jokes extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      favoriteMaximum: 10,
       count: 0,
       counting: false,
-      jokes: [],
       loading: false,
       error: '',
       reachedFavoritesMax: false
@@ -20,7 +20,7 @@ export default class Jokes extends React.Component {
   }
 
   counter = () => {
-    if (this.countFavorites() < 10) {
+    if (this.countFavorites() < this.state.favoriteMaximum) {
       this.setState({reachedFavoritesMax: false})
       this.setState(prevState => (
         {count: prevState.count + 1}
@@ -51,58 +51,61 @@ export default class Jokes extends React.Component {
   };
 
   getData = (number, setFavorite) => {
-    this.setState({loading:true})
-    console.log('get ' + number + 'jokes(s) ' + (setFavorite ? " and set favorite" : "" ));
+    this.setState({loading: true})
+    console.log('get ' + number + 'jokes(s) ' + (setFavorite ? " and set favorite" : ""));
     fetch(`http://api.icndb.com/jokes/random/${number}`)
       .then(response => response.json())
       .then((data) => this.setJokes(data, setFavorite))
-      .then(() => this.setState({loading:false}))
-      .catch((err) => this.setState({ error:err, loading: false}))
+      .then(() => this.setState({loading: false}))
+      .catch((err) => this.setState({error: err, loading: false}))
   }
 
   setJokes = (data, setFavorite) => {
-    data.value.map((joke) => { joke.favorite = setFavorite } );
+    data.value.map((joke) => {
+      joke.favorite = setFavorite
+    });
 
     // Array should only contain unique jokes
-    let jokes = this.state.jokes;
+    let jokes = this.props.jokes;
     let dataLength = data.value.length;
     for (let i = 0; i < dataLength; i++) {
       if (!(data.value[i].id in jokes)) {
-          jokes.push(data.value[i]);
+        jokes.push(data.value[i]);
       }
     }
-    // let jokes = [...this.state.jokes, ...data.value]
-    this.setState({jokes:jokes});
-    this.props.setValueInLocalStorage(jokes);
+    // let jokes = [...this.props.jokes, ...data.value]
+    this.props.setJokes([...jokes]);
   }
 
   countFavorites = () => {
-    return this.state.jokes.filter((obj) => obj.favorite === true).length
+    return this.props.jokes.filter((jokes) => jokes.favorite === true).length
   }
 
   toggleFavorite = (jokeId) => {
-    let jokes = this.state.jokes;
+    let jokes = this.props.jokes;
     let jokeIndex = jokes.findIndex((joke => joke.id == jokeId));
     jokes[jokeIndex].favorite = !jokes[jokeIndex].favorite;
-    this.setState({jokes: jokes})
+    this.props.setJokes([...jokes])
   }
 
   removeJoke = (jokeId) => {
-    let filtered = this.state.jokes.filter((obj) => obj.id !== jokeId);
-    this.setState({jokes: filtered})
+    let filtered = this.props.jokes.filter((jokes) => jokes.id !== jokeId);
+    this.props.setJokes([...filtered])
   }
 
   render() {
     return (
       <div className={"container"}>
         <h3>Chuck Norris</h3>
-        <p>Get 10 random jokes</p>
-        <button onClick={() => (this.getData(10, false))}>Get 10 jokes</button>
+        <p>Get {this.state.favoriteMaximum} random jokes</p>
+        <button onClick={() => (this.getData(this.state.favoriteMaximum, false))}>Get {this.state.favoriteMaximum} jokes</button>
         <p>Add one random joke to the favourites list every 5 seconds</p>
         <button onClick={this.toggleCounting}>{this.state.counting ? 'Pause' : 'Start'}</button>
         {this.state.error && <pre>{JSON.stringify(this.state.error, null, 2)}</pre>}
-        <h2>Jokes {this.state.loading && "Loading" }</h2>
-        <Joke jokes={this.state.jokes} toggleFavorite={this.toggleFavorite} removeJoke={this.removeJoke} count={this.state.count} />
+        <h2>Jokes {this.state.loading && "Loading"}</h2>
+        {Array.isArray(this.props.jokes) &&
+        <Joke jokes={this.props.jokes} toggleFavorite={this.toggleFavorite} removeJoke={this.removeJoke}
+              count={this.state.count}/>}
       </div>
     );
   }
