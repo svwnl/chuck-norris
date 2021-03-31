@@ -16,6 +16,16 @@ code {
   margin-bottom: 16px;
   padding: 8px 16px 16px;
   background-color: #edffec;
+  font-family: 'Roboto Slab', serif;
+}
+
+.logo {
+  max-width: 100px;
+}
+
+.card button {
+  border: none;
+  background-color: transparent;
 }
 
 .favorite .fa {
@@ -34,4 +44,47 @@ button {
 
 .text-green {
   color: #caf7e3;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.row .col {
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-end {
+  justify-content: flex-end;
+}
+
+h3 {
+  font-family: 'Roboto Slab', serif;
+  color: saddlebrown;
+}
+
+.btn {
+   border: none;
+   line-height: 1.5em;
+   padding: .5em 2em;
+   border-radius: 8em;
+  font-size: 1em;
+}
+
+.btn:focus {
+  border: none;
+}
+
+.btn.sandybrown {
+  background-color: sandybrown;
+}
+
+.btn.salmon {
+  color: white;
+  background-color: salmon;
 }

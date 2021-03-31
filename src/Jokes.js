@@ -60,9 +60,9 @@ export default class Jokes extends React.Component {
       .catch((err) => this.setState({error: err, loading: false}))
   }
 
-  setJokes = (data, setFavorite) => {
+  setJokes = (data, favorite) => {
     data.value.map((joke) => {
-      joke.favorite = setFavorite
+      return joke.favorite = favorite
     });
 
     // Array should only contain unique jokes
@@ -73,7 +73,6 @@ export default class Jokes extends React.Component {
         jokes.push(data.value[i]);
       }
     }
-    // let jokes = [...this.props.jokes, ...data.value]
     this.props.setJokes([...jokes]);
   }
 
@@ -83,7 +82,7 @@ export default class Jokes extends React.Component {
 
   toggleFavorite = (jokeId) => {
     let jokes = this.props.jokes;
-    let jokeIndex = jokes.findIndex((joke => joke.id == jokeId));
+    let jokeIndex = jokes.findIndex((joke => joke.id === jokeId));
     jokes[jokeIndex].favorite = !jokes[jokeIndex].favorite;
     this.props.setJokes([...jokes])
   }
@@ -95,18 +94,24 @@ export default class Jokes extends React.Component {
 
   render() {
     return (
-      <div className={"container"}>
-        <h3>Chuck Norris</h3>
-        <p>Get {this.state.favoriteMaximum} random jokes</p>
-        <button onClick={() => (this.getData(this.state.favoriteMaximum, false))}>Get {this.state.favoriteMaximum} jokes</button>
-        <p>Add one random joke to the favourites list every 5 seconds</p>
-        <button onClick={this.toggleCounting}>{this.state.counting ? 'Pause' : 'Start'}</button>
+      <>
+        <div className={"row"}>
+          <h2>Jokes {this.state.loading && "Loading"}</h2>
+        </div>
+        <div className={"row"}>
+          <div>
+            <button className={"btn sandybrown"} onClick={() => (this.getData(this.state.favoriteMaximum, false))}>Get {this.state.favoriteMaximum} random jokes<br/><small>Could be your new favorites</small></button>
+          </div>
+          <div className={"col flex-end"}>
+            <button className={"btn salmon"} onClick={this.toggleCounting}>{this.state.counting ? 'Stop' : 'Start'} adding favorites<br/><small>1 random joke every 5 sec.</small></button>
+          </div>
+        </div>
+<br/>
         {this.state.error && <pre>{JSON.stringify(this.state.error, null, 2)}</pre>}
-        <h2>Jokes {this.state.loading && "Loading"}</h2>
         {Array.isArray(this.props.jokes) &&
         <Joke jokes={this.props.jokes} toggleFavorite={this.toggleFavorite} removeJoke={this.removeJoke}
-              count={this.state.count}/>}
-      </div>
+              count={this.state.count} />}
+      </>
     );
   }
 }
