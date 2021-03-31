@@ -1,11 +1,12 @@
 import React from 'react';
+import ReactHtmlParser from 'react-html-parser';
 
 
 const Joke = ({jokes, toggleFavorite, removeJoke}) => {
 
   return (
     jokes.map((joke, index) => <div className={"card"} key={index}><p>
-        <small className={"text-green"}>[{joke.id}]</small><br/>{joke.joke}</p>
+        <small className={"text-green"}>[{joke.id}]</small><br/>{ ReactHtmlParser(joke.joke)}</p>
         <br/>
         <button className={joke.favorite ? "favorite" : ""} onClick={() => toggleFavorite(joke.id)}><i
           className={"fa fa-3x fa-heart"}></i>

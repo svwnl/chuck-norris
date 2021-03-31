@@ -76,8 +76,9 @@ h3 {
   font-size: 1em;
 }
 
-.btn:focus {
+button:focus {
   border: none;
+  outline: none;
 }
 
 .btn.sandybrown {
