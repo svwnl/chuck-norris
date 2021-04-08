@@ -36,7 +36,7 @@ button, .btn {
 
 button.disabled, button:disabled, .btn.disabled, .btn:disabled {
     cursor: auto;
-    opacity: 0.1;
+    opacity: 0.2;
     transition: 0.2s;
 }
 
@@ -82,6 +82,15 @@ button {
     flex-direction: row;
 }
 
+.column {
+    display: flex;
+    flex-direction: column;
+}
+
+.stretch {
+    align-items: stretch;
+}
+
 .flex-space-around {
     justify-content: space-around;
 }
@@ -98,11 +107,15 @@ button {
     flex-wrap: wrap;
 }
 
-.row .col {
+.col {
     justify-content: center;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.flex-1 {
+    flex: 1;
 }
 
 h3 {
@@ -118,6 +131,13 @@ h3 {
     font-size: 1em;
 }
 
+.margin-left {
+    margin-left: 15px;
+}
+.margin-right {
+    margin-right: 15px;
+}
+
 .bad-joke {
     width: 52px;
     height: 52px;
@@ -131,4 +151,12 @@ h3 {
 
 .text-gray {
     color: gray;
+}
+
+.float-right {
+    float: right;
+}
+
+.text-center {
+    text-align: center;
 }

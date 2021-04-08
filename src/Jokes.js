@@ -7,8 +7,7 @@ export default class Jokes extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      counting: false,
-      badJokes: []
+      counting: false
     }
   }
 
@@ -45,20 +44,11 @@ export default class Jokes extends React.Component {
     if (!this.props.favoritesMaxed || jokes[jokeIndex].favorite === true) {
       jokes[jokeIndex].favorite = !jokes[jokeIndex].favorite;
       this.props.setJokes([...jokes])
-    } else {
-      console.log('maximum allowed favorites reached');
     }
   }
 
-  setBadJoke = (jokeId) => {
-    console.log(this.state.badJokes);
-    let badJokesSet = new Set(this.state.badJokes);
-    badJokesSet.add(jokeId);
-    this.setState({badJokes: badJokesSet});
-  }
-
   removeJoke = (jokeId) => {
-    this.setBadJoke(jokeId)
+    this.props.setBadJoke(jokeId)
     let filtered = this.props.jokes.filter((jokes) => jokes.id !== jokeId);
     this.props.setJokes([...filtered])
   }
@@ -70,15 +60,16 @@ export default class Jokes extends React.Component {
           <h2>Jokes</h2>
         </div>
         <div className={"row flex-space-around"}>
-          <div>
-            <button className={"btn sandybrown"}
-                    onClick={() => (this.props.getData(10, false))}>Get 10 random
-              jokes<br/><small>Could be your new favorites</small></button>
+          <div className={"flex-1 column"}>
+            <div className={"btn margin-right sandybrown text-center flex-1 stretch"}
+                 onClick={() => (this.props.getData(10, false))}>Get 10 random
+              jokes<br/><small>Love them or hate them</small></div>
           </div>
-          <div className={"col flex-end"}>
-            <button className={this.props.favoritesMaxed ? "btn salmon disabled" : "btn salmon"}
-                    onClick={this.toggleCounting}>{this.state.counting ? 'Stop' : 'Start'} adding favorites<br/><small>1
-              random joke every 5 sec.</small></button>
+          <div className={"flex-1 column"}>
+            <div
+              className={"btn margin-left salmon text-center flex-1 stretch" + (this.props.favoritesMaxed ? " disabled" : "")}
+              onClick={this.toggleCounting}>{this.props.favoritesMaxed ? "Maximum favorites reached" : (this.state.counting ? 'Stop' : 'Start') + " adding random favorites"}<br/><small>1
+              joke every 5 sec.</small></div>
           </div>
         </div>
         <br/>
@@ -87,11 +78,7 @@ export default class Jokes extends React.Component {
               toggleFavorite={this.toggleFavorite}
               removeJoke={this.removeJoke}
               reachedFavoritesMax={this.props.favoritesMaxed}/>}
-
-        <div className={"row flex-center text-gray"}><p>Joke graveyard</p></div>
-        <div className={"row flex-center flex-wrap"}>
-          <BadJoke badJokes={[...this.state.badJokes]}/>
-        </div>
+        <BadJoke badJokes={[...this.props.badJokes]}/>
       </>
     );
   }

@@ -7,6 +7,7 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [favoritesMaxed, setFavoritesMaxed] = useState(false);
+  const [badJokes, setBadJokes] = useState([]);
   const [jokes, setJokes] = useState(
     JSON.parse(localStorage.getItem('jokesInLocalStorage')) || []
   );
@@ -35,7 +36,11 @@ const App = () => {
     let dataLength = data.value.length;
     for (let i = 0; i < dataLength; i++) {
       if (!(data.value[i].id in j)) {
-        j.unshift(data.value[i]);
+        if (!badJokes.has(data.value[i].id)) {
+          j.unshift(data.value[i]);
+        } else {
+          console.log("bad joke: " + data.value[i].id)
+        }
       }
     }
     setJokes([...j]);
@@ -43,6 +48,12 @@ const App = () => {
 
   const countFavorites = (jokes) => {
     return jokes.filter((jokes) => jokes.favorite === true).length
+  }
+
+  const setBadJoke = (jokeId) => {
+    let badJokesSet = new Set(badJokes);
+    badJokesSet.add(jokeId);
+    setBadJokes(badJokesSet);
   }
 
   return (
@@ -54,7 +65,8 @@ const App = () => {
       </div>
       <div>{loading && "Loading"}</div>
       {error && <pre>{JSON.stringify(error, null, 2)}</pre>}
-      <Jokes jokes={jokes} setJokes={setJokes} getData={getData} favoritesMaxed={favoritesMaxed}/>
+      <Jokes jokes={jokes} setJokes={setJokes} getData={getData} favoritesMaxed={favoritesMaxed}
+             badJokes={badJokes} setBadJoke={setBadJoke}/>
     </div>
   );
 };
