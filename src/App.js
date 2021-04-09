@@ -7,7 +7,7 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [favoritesMaxed, setFavoritesMaxed] = useState(false);
-  const [badJokes, setBadJokes] = useState([]);
+  const [badJokes, setBadJokes] = useState(new Set());
   const [jokes, setJokes] = useState(
     JSON.parse(localStorage.getItem('jokesInLocalStorage')) || []
   );
